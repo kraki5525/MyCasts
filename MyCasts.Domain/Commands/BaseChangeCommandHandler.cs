@@ -8,7 +8,7 @@ namespace MyCasts.Domain.Commands
 {
     public abstract class BaseChangeCommandHandler<T,K, L, KL> : IAsyncRequestHandler<T, KL>
         where T : IRequest<KL>
-        where K : IChangeDbAction<L>, new()
+        where K : ADbChangeAction<L>, new()
     {
         protected Db _db;
 

@@ -5,7 +5,7 @@ using Dapper;
 
 namespace MyCasts.Domain.Models.Commands
 {
-    public class InsertPodcastDbAction : IChangeDbAction<Podcast>
+    public class InsertPodcastDbAction : ADbChangeAction<Podcast>
     {
         public override Podcast Execute(DbConnection connection)
         {
