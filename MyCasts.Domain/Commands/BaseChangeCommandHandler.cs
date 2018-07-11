@@ -6,9 +6,9 @@ using MyCasts.Domain.Models.Commands;
 
 namespace MyCasts.Domain.Commands
 {
-    public abstract class BaseChangeCommandHandler<T,K, L, KL> : IAsyncRequestHandler<T, KL>
-        where T : IRequest<KL>
-        where K : ADbChangeAction<L>, new()
+    public abstract class BaseChangeCommandHandler<TRequest,TDbAction, KDbResult, KResponse> : IAsyncRequestHandler<TRequest, KResponse>
+        where TRequest : IRequest<KResponse>
+        where TDbAction : ADbChangeAction<KDbResult>, new()
     {
         protected Db _db;
 
@@ -17,17 +17,17 @@ namespace MyCasts.Domain.Commands
             _db = db;
         }
 
-        public async virtual Task<KL> Handle(T message)
+        public async virtual Task<KResponse> Handle(TRequest message)
         {
-            var dbCommand = new K();
+            var dbCommand = new TDbAction();
             dbCommand.Model = Convert(message);
             var result = await _db.ExecuteAsync(dbCommand);
-            return Mapper.Map<KL>(result);
+            return Mapper.Map<KResponse>(result);
         }
 
-        protected virtual L Convert(T message)
+        protected virtual KDbResult Convert(TRequest message)
         {
-            return Mapper.Map<L>(message);
+            return Mapper.Map<KDbResult>(message);
         }
     }
 }

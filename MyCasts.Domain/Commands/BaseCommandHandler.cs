@@ -8,9 +8,9 @@ using MyCasts.Domain.Models.Commands;
 
 namespace MyCasts.Domain.Commands
 {
-    public abstract class BaseCommandHandler<T,K, TK> : IAsyncRequestHandler<T, TK>
-        where T : IRequest<TK>
-        where K : IDbAction<TK>
+    public abstract class BaseCommandHandler<TRequest,TDbAction, KResponse> : IAsyncRequestHandler<TRequest, KResponse>
+        where TRequest : IRequest<KResponse>
+        where TDbAction : IDbAction<KResponse>
     {
         protected Db _db;
 
@@ -19,30 +19,30 @@ namespace MyCasts.Domain.Commands
             _db = db;
         }
 
-        public async virtual  Task<TK> Handle(T message)
+        public async virtual  Task<KResponse> Handle(TRequest message)
         {
-            var dbCommand = Mapper.Map<K>(message);
+            var dbCommand = Mapper.Map<TDbAction>(message);
             var result = await _db.ExecuteAsync(dbCommand);
             return result;
         }
     }
 
-    public abstract class BaseCommandHandler<T,K, L, KL> : IAsyncRequestHandler<T, KL>
-        where T : IRequest<KL>
-        where K : IDbAction<L>
+    public abstract class BaseCommandHandler<TRequest,TDbAction, KDbResult, KResponse> : IAsyncRequestHandler<TRequest, KResponse>
+        where TRequest : IRequest<KResponse>
+        where TDbAction : IDbAction<KDbResult>
     {
         protected Db _db;
-        
+
         public BaseCommandHandler(Db db)
         {
             _db = db;
         }
 
-        public async virtual Task<KL> Handle(T message)
+        public async virtual Task<KResponse> Handle(TRequest message)
         {
-            var dbCommand = Mapper.Map<K>(message);
+            var dbCommand = Mapper.Map<TDbAction>(message);
             var result = await _db.ExecuteAsync(dbCommand);
-            return Mapper.Map<KL>(result);
+            return Mapper.Map<KResponse>(result);
         }
     }
 }
