@@ -2,13 +2,13 @@ using System;
 using System.Threading.Tasks;
 using BatMap;
 using MediatR;
-using MyCasts.Domain.Caching;
+// using MyCasts.Domain.Caching;
 using MyCasts.Domain.Models;
 using MyCasts.Domain.Models.Commands;
 
 namespace MyCasts.Domain.Commands
 {
-    public class GetPodcastCommand : IRequest<GetPodcastCommand.PodcastInfo>, INeedCaching
+    public class GetPodcastCommand : IRequest<GetPodcastCommand.PodcastInfo> //, INeedCaching
     {
         public int Id { get; set; }
 
