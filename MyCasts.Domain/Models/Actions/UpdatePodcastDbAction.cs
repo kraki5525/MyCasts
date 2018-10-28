@@ -1,5 +1,6 @@
 using System;
 using System.Data.Common;
+using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 
@@ -13,7 +14,7 @@ namespace MyCasts.Domain.Models.Commands
             return Model;
         }
 
-        public async override Task<Podcast> ExecuteAsync(DbConnection connection)
+        public async override Task<Podcast> ExecuteAsync(DbConnection connection, CancellationToken token)
         {
             await connection.ExecuteAsync("update podcast set name = @Name where id = @Id", new {Id = Model.Id, Name = Model.Name, FeedUri = Model.FeedUri.ToString()});
             return Model;

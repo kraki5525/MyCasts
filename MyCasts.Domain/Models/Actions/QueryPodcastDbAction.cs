@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using MyCasts.Domain.Models;
@@ -14,7 +15,7 @@ namespace MyCasts.Domain.Models.Commands
             return connection.Query<Podcast>("select * from podcast");
         }
 
-        public override Task<IEnumerable<Podcast>> ExecuteAsync(DbConnection connection)
+        public override Task<IEnumerable<Podcast>> ExecuteAsync(DbConnection connection, CancellationToken token)
         {
             return connection.QueryAsync<Podcast>("select * from podcast");
         }

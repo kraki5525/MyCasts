@@ -12,7 +12,7 @@ namespace MyCasts.Domain.Commands
         public int Id { get; set; }
     }
 
-    public class GetFeedHandler : ICancellableAsyncRequestHandler<GetFeedCommand, string>
+    public class GetFeedHandler : IRequestHandler<GetFeedCommand, string>
     {
         private readonly Db _db;
         private readonly FeedSource _feedSource;

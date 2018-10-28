@@ -22,7 +22,7 @@ namespace MyCasts.Domain
             Mapper.RegisterMap<Uri, Uri>((uri, context) => new Uri(uri, ""));
 
             container.RegisterSingleton(typeof(Db), () => new Db(connectionString));
-            container.RegisterDecorator(typeof(IAsyncRequestHandler<,>), 
+            container.RegisterDecorator(typeof(IRequestHandler<,>), 
                                          typeof(ValidationAsyncHandler<,>));
             
             foreach (var validator in GetValidatorTypes())

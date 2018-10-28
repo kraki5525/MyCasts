@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
 using MyCasts.Domain.Commands;
@@ -14,13 +15,16 @@ namespace MyCasts.Tests
         [Fact]
         public async Task CreatePodcast_Calls_InsertPodcastDbCommand()
         {
-            // var db = A.Fake<Db>();
-            // A.CallTo(() => db.ExecuteAsync(A<InsertPodcastDbCommand>._)).Returns(Task.FromResult(1));
+            var db = A.Fake<IDb>();
+            var model = new Podcast() {Id = 1};
+            var token = new CancellationToken();
 
-            // var command = new CreatePodcastCommand() { Name = "Test", FeedUri = new Uri("http://www.google.com")};
-            // var handler = new CreatePodcastHandler(db);
-            // var id = await handler.Handle(command);
-            // id.ShouldBe(1);
+            A.CallTo(() => db.ExecuteAsync(A<InsertPodcastDbAction>._, token)).Returns(Task.FromResult(model));
+
+            var command = new CreatePodcastCommand() { Name = "Test", FeedUri = new Uri("http://www.google.com")};
+            var handler = new CreatePodcastHandler(db);
+            var result = await handler.Handle(command, token);
+            result.Id.ShouldBe(1);
         }
     }
 }

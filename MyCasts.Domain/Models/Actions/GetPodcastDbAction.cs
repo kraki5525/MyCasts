@@ -1,5 +1,6 @@
 using System;
 using System.Data.Common;
+using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 
@@ -13,7 +14,7 @@ namespace MyCasts.Domain.Models.Commands
         {
             return connection.QueryFirstOrDefault<Podcast>("select * from podcast where id = @Id", new {Id = Id});
         }
-        public Task<Podcast> ExecuteAsync(DbConnection connection)
+        public Task<Podcast> ExecuteAsync(DbConnection connection, CancellationToken token)
         {
             return connection.QueryFirstOrDefaultAsync<Podcast>("select * from podcast where id = @Id", new {Id = Id});
         }

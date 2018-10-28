@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using MediatR.Pipeline;
 using MyCasts.Domain.Services;
 using MyCasts.Domain;
+using System.IO;
 
 namespace MyCasts.Web
 {
@@ -93,18 +94,34 @@ namespace MyCasts.Web
             // Add application services. For instance:
 
             _container.RegisterSingleton<IMediator, Mediator>();
+            // _container.Register(typeof(IRequestHandler<,>), assemblies);
+            // _container.Register(typeof(IRequestHandler<>), assemblies);
+
+            // //Pipeline
+            // _container.RegisterCollection(typeof(IPipelineBehavior<,>), Enumerable.Empty<Type>());
+            // _container.RegisterCollection(typeof(IRequestPreProcessor<>), Enumerable.Empty<Type>());
+            // _container.RegisterCollection(typeof(IRequestPostProcessor<,>), Enumerable.Empty<Type>());
+            // _container.RegisterSingleton(new SingleInstanceFactory(_container.GetInstance));
+            // _container.RegisterSingleton(new MultiInstanceFactory(_container.GetAllInstances));
+
             _container.Register(typeof(IRequestHandler<,>), assemblies);
-            _container.Register(typeof(IAsyncRequestHandler<,>), assemblies);
-            _container.Register(typeof(IRequestHandler<>), assemblies);
-            _container.Register(typeof(IAsyncRequestHandler<>), assemblies);
-            _container.Register(typeof(ICancellableAsyncRequestHandler<>), assemblies);
+
+            // we have to do this because by default, generic type definitions (such as the Constrained Notification Handler) won't be registered
+            var notificationHandlerTypes = _container.GetTypesToRegister(typeof(INotificationHandler<>), assemblies, new TypesToRegisterOptions
+            {
+                IncludeGenericTypeDefinitions = true,
+                IncludeComposites = false,
+            });
+            _container.Collection.Register(typeof(INotificationHandler<>), notificationHandlerTypes);
 
             //Pipeline
-            _container.RegisterCollection(typeof(IPipelineBehavior<,>), Enumerable.Empty<Type>());
-            _container.RegisterCollection(typeof(IRequestPreProcessor<>), Enumerable.Empty<Type>());
-            _container.RegisterCollection(typeof(IRequestPostProcessor<,>), Enumerable.Empty<Type>());
-            _container.RegisterSingleton(new SingleInstanceFactory(_container.GetInstance));
-            _container.RegisterSingleton(new MultiInstanceFactory(_container.GetAllInstances));
+            _container.Collection.Register(typeof(IPipelineBehavior<,>), new []
+            {
+                typeof(RequestPreProcessorBehavior<,>),
+                typeof(RequestPostProcessorBehavior<,>),
+            });
+
+            _container.Register(() => new ServiceFactory(_container.GetInstance), Lifestyle.Singleton);
 
             foreach (var module in modules)
             {

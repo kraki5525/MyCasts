@@ -1,5 +1,6 @@
 using System;
 using System.Data.Common;
+using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 
@@ -14,7 +15,7 @@ namespace MyCasts.Domain.Models.Commands
             return Model;
         }
 
-        public async override Task<Podcast> ExecuteAsync(DbConnection connection)
+        public async override Task<Podcast> ExecuteAsync(DbConnection connection, CancellationToken token)
         {
             var id = await connection.QuerySingleAsync<int>("insert into podcast(name, feedUri) values (@Name, @FeedUri);select last_insert_rowid();", new {Name = Model.Name, FeedUri = Model.FeedUri.ToString()});
             Model.Id = id;

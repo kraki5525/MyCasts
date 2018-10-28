@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
@@ -8,22 +9,22 @@ using SimpleInjector;
 
 namespace MyCasts.Domain.Validation
 {
-    public class ValidationAsyncHandler<T,TK> : IAsyncRequestHandler<T, TK>
+    public class ValidationAsyncHandler<T,TK> : IRequestHandler<T, TK>
         where T : IRequest<TK>, INeedValidation
     {
-        private readonly IAsyncRequestHandler<T, TK> _decoratee;
+        private readonly IRequestHandler<T, TK> _decoratee;
         private readonly IValidator<T> _validator;
 
-        public ValidationAsyncHandler(IAsyncRequestHandler<T, TK> decoratee, IValidator<T> validator)
+        public ValidationAsyncHandler(IRequestHandler<T, TK> decoratee, IValidator<T> validator)
         {
             _decoratee = decoratee;
             _validator = validator;
         }
 
-        public Task<TK> Handle(T message)
+        public Task<TK> Handle(T message, CancellationToken token)
         {
             _validator.ValidateAndThrow(message);
-            return _decoratee.Handle(message);
+            return _decoratee.Handle(message, token);
         }
     }
 }

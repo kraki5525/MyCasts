@@ -23,7 +23,7 @@ namespace MyCasts.Domain.Commands
 
     public class CreatePodcastHandler : BaseChangeCommandHandler<CreatePodcastCommand, InsertPodcastDbAction, Podcast, CreatePodcastCommand.PodcastInfo>, INeedValidation
     {
-        public CreatePodcastHandler(Db db) : base(db)
+        public CreatePodcastHandler(IDb db) : base(db)
         { }
     }
 }
