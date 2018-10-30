@@ -2,16 +2,24 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
+using MyCasts.Domain;
 using MyCasts.Domain.Commands;
 using MyCasts.Domain.Models;
 using MyCasts.Domain.Models.Commands;
 using Shouldly;
+using SimpleInjector;
 using Xunit;
 
 namespace MyCasts.Tests
 {
     public class MyTests
     {
+        public MyTests()
+        {
+            var container = new Container();
+            (new Module()).Initialize(container, null);
+        }
+
         [Fact]
         public async Task CreatePodcast_Calls_InsertPodcastDbCommand()
         {
