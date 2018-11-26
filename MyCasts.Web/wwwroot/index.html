@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="/css/site.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
-    <h1>Home</h1>
-    <form method="POST" action="/api/podcasts">
-        <input name="Name" type="text"/>
-        <input name="FeedUri" type="text"/>
-        <button type="submit">Submit</button>
-    </form>
+    <div id="app">
+        <form>
+            <input type="text" v-model="name" placeholder="name">
+            <input type="text" v-model="url" placeholder="url">
+            <button type="button" v-on:click="add">Add</button>
+        </form>
+        {{ podcasts }}
+    </div>
+    <script src="js/site.js"></script>
 </body>
 </html>
