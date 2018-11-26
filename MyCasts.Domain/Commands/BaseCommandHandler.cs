@@ -32,9 +32,9 @@ namespace MyCasts.Domain.Commands
         where TRequest : IRequest<KResponse>
         where TDbAction : IDbAction<KDbResult>
     {
-        protected Db _db;
+        protected IDb _db;
 
-        public BaseCommandHandler(Db db)
+        public BaseCommandHandler(IDb db)
         {
             _db = db;
         }

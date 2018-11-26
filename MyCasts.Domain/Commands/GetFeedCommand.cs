@@ -14,11 +14,11 @@ namespace MyCasts.Domain.Commands
 
     public class GetFeedHandler : IRequestHandler<GetFeedCommand, string>
     {
-        private readonly Db _db;
+        private readonly IDb _db;
         private readonly FeedSource _feedSource;
         private readonly IMediator _mediator;
 
-        public GetFeedHandler(IMediator mediator, Db db, FeedSource feedSource)
+        public GetFeedHandler(IMediator mediator, IDb db, FeedSource feedSource)
         {
             this._mediator = mediator;
             this._db = db;

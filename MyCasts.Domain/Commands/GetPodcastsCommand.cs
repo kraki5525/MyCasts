@@ -18,7 +18,7 @@ namespace MyCasts.Domain.Commands
 
     public class GetPodcastsHandler : BaseCommandHandler<GetPodcastsCommand, QueryPodcastDbAction,  IEnumerable<Podcast>, IEnumerable<GetPodcastsCommand.PodcastsInfo>>
     {
-        public GetPodcastsHandler(Db db) : base(db)
+        public GetPodcastsHandler(IDb db) : base(db)
         { }
     }
 }

@@ -21,7 +21,7 @@ namespace MyCasts.Domain
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             Mapper.RegisterMap<Uri, Uri>((uri, context) => new Uri(uri, ""));
 
-            container.RegisterSingleton(typeof(Db), () => new Db(connectionString));
+            container.RegisterSingleton(typeof(IDb), () => new Db(connectionString));
             container.RegisterDecorator(typeof(IRequestHandler<,>), 
                                          typeof(ValidationAsyncHandler<,>));
             

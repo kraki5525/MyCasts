@@ -22,7 +22,7 @@ namespace MyCasts.Domain.Commands
 
     public class GetPodcastHandler : BaseCommandHandler<GetPodcastCommand, GetPodcastDbAction, Podcast, GetPodcastCommand.PodcastInfo>
     {
-        public GetPodcastHandler(Db db) : base(db)
+        public GetPodcastHandler(IDb db) : base(db)
         { }
     }
 }

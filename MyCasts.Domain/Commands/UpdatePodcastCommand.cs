@@ -25,7 +25,7 @@ namespace MyCasts.Domain.Commands
 
     public class UpdatePodcastHandler : BaseChangeCommandHandler<UpdatePodcastCommand, UpdatePodcastDbAction, Podcast, UpdatePodcastCommand.PodcastInfo>, INeedValidation
     {
-        public UpdatePodcastHandler(Db db) : base(db)
+        public UpdatePodcastHandler(IDb db) : base(db)
         { }
     }
 }
